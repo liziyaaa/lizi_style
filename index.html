@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f6f2">
+  <meta name="description" content="比肩：输入两个人的身高与体重，直观比较站在一起的比例，切换穿搭，收藏喜欢的组合。">
+  <title>比肩 · 两个人，刚刚好的距离</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%232e5348'/%3E%3Cpath d='M20 47V21m0 0-6 8m6-8 6 8m18 18V29m0 0-6 8m6-8 6 8' stroke='%23fff' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="比肩首页"><span class="brand-icon">↟</span><span>比肩<small>SIDE BY SIDE</small></span></a>
+    <div class="header-right"><span class="local-tag"><i></i> 数据只留在你的浏览器</span><button class="icon-button" id="help" aria-label="关于模型" title="关于模型">?</button></div>
+  </header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">A LITTLE CLOSER, A LITTLE CLEARER</p><h1>站在一起，<span>看看感觉。</span></h1><p class="subtitle">把抽象的数字，变成两个人的比例。</p></div><button id="export" class="button export"><span aria-hidden="true">↓</span> 保存对比图</button></section>
+    <div class="workspace">
+      <section class="visual-panel" aria-label="身高体型对比画布">
+        <div class="visual-toolbar"><div class="segmented" role="group" aria-label="查看角度"><button class="active" data-view="front" aria-pressed="true">正面</button><button data-view="side" aria-pressed="false">侧面</button><button data-view="silhouette" aria-pressed="false">剪影</button></div><label class="switch-label"><input type="checkbox" id="ruler" checked><span class="switch"></span>身高尺</label></div>
+        <div class="stage-wrap"><svg id="stage" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 650" role="img" aria-label="两人的等比例身高体型示意"></svg></div>
+        <div class="comparison-stats" aria-live="polite"><div><span>裸足身高差</span><strong id="height-diff">15<small>cm</small></strong></div><div><span>当前视觉身高差</span><strong id="visual-diff">15<small>cm</small></strong></div><div class="position-stat"><span>头顶大约齐到</span><strong id="alignment">对方的眼睛</strong></div></div>
+        <div class="scene-options"><label>站位间距 <input id="gap" type="range" min="0" max="45" step="1" value="12"><output id="gap-value">12 cm</output></label><button class="text-button" id="swap">⇄ 交换左右</button></div>
+        <p class="canvas-note">同一比例 · 同一地面 · 亚洲青年风格示意模型</p>
+      </section>
+      <aside class="controls" aria-label="人物参数">
+        <div class="controls-heading"><h2>两个人的设定</h2><button id="reset" class="text-button">恢复默认</button></div>
+        <div id="person-controls"></div>
+        <p class="model-note">体重调整围度；身形轮廓补充肌肉感与脂肪分布。外形为近似示意，不代表某个体重的真实长相。</p>
+      </aside>
+    </div>
+    <section class="presets-section"><div class="section-title"><div><p class="eyebrow">YOUR LITTLE COLLECTION</p><h2>留住喜欢的比例</h2></div><button id="save-preset" class="button primary">＋ 收藏这组</button></div><div id="presets" class="presets"></div><p class="collection-hint">收藏仅保存在当前浏览器，可以随时切换比较。</p></section>
+    <footer><span>比肩 <span class="footer-dot">·</span> 身高有刻度，喜欢没有标准答案。</span><button id="about" class="text-button">模型说明</button></footer>
+  </main>
+  <dialog id="about-dialog"><div class="dialog-heading"><h2>关于这两个人</h2><button class="icon-button" id="close-about" aria-label="关闭">×</button></div><p>这是原创的参数化二维人物，采用深色头发与亚洲青年风格的面部设计。它不是中国人群的人体测量数据库，也不是真人扫描模型。</p><p><strong>身高：</strong>裸足头顶到地面按同一厘米比例绘制。头发、姿势和穿搭均为示意；鞋底增高单独计算。头顶落点根据固定头身比估算。</p><p><strong>体重：</strong>利用体重与身高的比例，连续调整躯干、手臂和腿部宽度。相同身高体重可能对应多种外形，请结合身形选项观看；极端参数的误差更大。</p><p><strong>穿搭：</strong>宽松衣服会覆盖身形；看体型时可切换“贴身基础”，看约会观感时可切换日常穿搭。没有吸引力评分或“最佳情侣身高差”。</p><p><strong>隐私：</strong>不联网计算、不上传输入。收藏和上次设定保存在本浏览器。导出图片会包含当前数字，请自行决定是否分享。</p><button class="button primary" id="understood">明白了</button></dialog>
+  <dialog id="save-dialog"><form id="save-form"><div class="dialog-heading"><h2>给这组比例起个名字</h2><button type="button" class="icon-button" id="close-save" aria-label="关闭">×</button></div><label class="save-label" for="preset-name">方案名称</label><input id="preset-name" maxlength="24" placeholder="例如：周末散步" autocomplete="off" required><button class="button primary" type="submit">保存方案</button></form></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
